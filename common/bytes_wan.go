@@ -1,4 +1,4 @@
-// Copyright 2017 The go-ethereum Authors
+// Copyright 2014 The go-ethereum Authors
 // This file is part of the go-ethereum library.
 //
 // The go-ethereum library is free software: you can redistribute it and/or modify
@@ -14,32 +14,14 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the go-ethereum library. If not, see <http://www.gnu.org/licenses/>.
 
-package hexutil_test
+// Package common contains various helper functions.
+package common
 
-import (
-	"encoding/json"
-	"fmt"
-
-	"github.com/codeoneline/mygo/common/hexutil"
-)
-
-type MyType [5]byte
-
-func (v *MyType) UnmarshalText(input []byte) error {
-	return hexutil.UnmarshalFixedText("MyType", input, v[:])
-}
-
-func (v MyType) String() string {
-	return hexutil.Bytes(v[:]).String()
-}
-
-func ExampleUnmarshalFixedText() {
-	var v1, v2 MyType
-	fmt.Println("v1 error:", json.Unmarshal([]byte(`"0x01"`), &v1))
-	fmt.Println("v2 error:", json.Unmarshal([]byte(`"0x0101010101"`), &v2))
-	fmt.Println("v2:", v2)
-	// Output:
-	// v1 error: hex string has length 2, want 10 for MyType
-	// v2 error: <nil>
-	// v2: 0x0101010101
+func ToHex(b []byte) string {
+	hex := Bytes2Hex(b)
+	// Prefer output of "0x0" instead of "0x"
+	if len(hex) == 0 {
+		hex = "0"
+	}
+	return "0x" + hex
 }
